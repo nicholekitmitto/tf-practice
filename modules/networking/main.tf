@@ -33,19 +33,11 @@ resource "aws_network_interface" "wp_eni" {
   subnet_id   = aws_subnet.private_sub.id
   private_ips = ["10.0.0.50"]
 
-  attachment {
-    instance     = aws_instance.wp_instance.id
-    device_index = 1
-  }
-
   tags = {
     Name = "private_network_interface"
   }
 }
 
-output "wp_eni" {
-  value = aws_network_interface.wp_eni.id
-}
 /*=== NAT === */
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_network_interface.wp_eni.id
@@ -133,8 +125,4 @@ resource "aws_instance" "wp_instance" {
   tags = {
     Name = "wp_instance"
   }
-}
-
-output "wp_instance" {
-  value = aws_instance.wp_instance.id
 }
