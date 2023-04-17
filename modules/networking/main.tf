@@ -7,6 +7,15 @@ resource "aws_vpc" "wp_vpc" {
   }
 }
 
+/*=== IGW ===*/
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.wp_vpc.id
+
+  tags = {
+    Name = "wp_igw"
+  }
+}
+
 /*=== Subnets ===*/
 resource "aws_subnet" "public_sub" {
   vpc_id                  = aws_vpc.wp_vpc.id
@@ -48,15 +57,6 @@ resource "aws_nat_gateway" "nat" {
 
   tags = {
     Name = "pub_nat"
-  }
-}
-
-/*=== IGW ===*/
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.wp_vpc.id
-
-  tags = {
-    Name = "wp_igw"
   }
 }
 
