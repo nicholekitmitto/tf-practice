@@ -30,17 +30,20 @@ resource "aws_subnet" "private_sub" {
 
 /*=== ENI ===*/
 resource "aws_network_interface" "wp_eni" {
-  subnet_id   = aws_subnet.private_sub.id
-  private_ips = ["10.0.0.50"]
+  subnet_id = aws_subnet.private_sub.id
 
   tags = {
     Name = "private_network_interface"
   }
 }
 
+resource "aws_eip" "nat_eip" {
+  vpc = true
+}
+
 /*=== NAT === */
 resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_network_interface.wp_eni.id
+  allocation_id = aws_eip.nat_eip.id
   subnet_id     = aws_subnet.public_sub.id
 
   tags = {
